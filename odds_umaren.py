@@ -16,15 +16,15 @@ def to_s(s):
   return s.encode('utf-8').strip()
 
 def get_result(code):
-#  try:
+  try:
     url="http://keiba.yahoo.co.jp/odds/ur/"+code+"/"
     res=urllib.urlopen(url)
     page=res.read()
     root=etree.fromstring(page,etree.HTMLParser())
-    get_tanfuku(code,root)
+    get_umaren(code,root)
     time.sleep(1)
-#  except :
-#    print "error:"+code
+  except :
+    print "error:"+code
 
 def to_date(s):
   s=re.sub('（.*$','',s)
@@ -36,8 +36,12 @@ def to_date(s):
   #return s
   
 
-def get_tanfuku(code,root):
-  elem=root.xpath('//div[@class="clearFix mgnBS"]//table[@class="oddsLs"]')
+def get_umaren(code,root):
+  get_umaren_part(code,root,"mgnBS")
+  get_umaren_part(code,root,"mgnBL")
+
+def get_umaren_part(code,root,cls):
+  elem=root.xpath('//div[@class="clearFix '+cls+'"]//table[@class="oddsLs"]')
   jiku=""
   waku=""
   for tbl in elem:
