@@ -16,15 +16,15 @@ def to_s(s):
   return s.encode('utf-8').strip()
 
 def get_result(code):
-  try:
-    url="http://keiba.yahoo.co.jp/odds/tfw/"+code+"/"
+#  try:
+    url="http://keiba.yahoo.co.jp/odds/ur/"+code+"/"
     res=urllib.urlopen(url)
     page=res.read()
     root=etree.fromstring(page,etree.HTMLParser())
     get_tanfuku(code,root)
     time.sleep(1)
-  except :
-    print "error:"+code
+#  except :
+#    print "error:"+code
 
 def to_date(s):
   s=re.sub('（.*$','',s)
@@ -37,13 +37,13 @@ def to_date(s):
   
 
 def get_tanfuku(code,root):
-  elem=root.xpath('//div[@class="clearFix mgnBL"]//table[@class="oddsLs"]')
+  elem=root.xpath('//div[@class="clearFix mgnBS"]//table[@class="oddsLs"]')
   jiku=""
   waku=""
   for tbl in elem:
     for tr in tbl.xpath('./tr'):
-      if len(tr.xpath("./th/div"))!=0:
-        jiku=to_s(tr.xpath("./th/div")[0].text)
+      if len(tr.xpath("./th[@class='oddsJk']"))!=0:
+        jiku=to_s(tr.xpath("./th[@class='oddsJk']")[0].text)
         #print "jiku="+jiku+"\n"
       elif len(tr.xpath("./th"))!=0:
         waku=to_s(tr.xpath("./th")[0].text)
@@ -52,7 +52,7 @@ def get_tanfuku(code,root):
       if len(td) != 0:
         odds=to_s(td[0].text)
         #print odds+"\n"
-        f=open("data/odds_waku.txt","a")
+        f=open("data/odds_umaren.txt","a")
         f.write(code+"\t"+jiku+"\t"+waku+"\t"+odds+"\n")
         f.close()
 
@@ -92,5 +92,4 @@ def get_resultall():
 
 if __name__ == '__main__':
   #get_resultall()
-  get_result("1404030211")
-  #get_result("0001010101")
+  get_result("1605021210")
