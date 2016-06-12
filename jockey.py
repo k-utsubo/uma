@@ -5,6 +5,7 @@ import urllib
 import urllib2
 from lxml import etree
 import time
+import re
 
 
 def get_jockey(hira):
@@ -40,12 +41,22 @@ def get_jockey_detail(param):
   res=urllib.urlopen(url)
   page=res.read().replace('\n','').replace('\r','')
   root=etree.fromstring(page,etree.HTMLParser())
+  yomi=root.xpath('//div[@id="dirTitName"]/p/text()')[0]
   name=root.xpath('//div[@id="dirTitName"]/h1/text()')[0]
   bday=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[0]
   syozoku=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[1]
+  menkyo=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[2]
+  #kijo=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[3]
+  #syori=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[4]
+  bday=bday.encode('utf-8')
+  bday=re.sub(r'年','-',bday)
+  bday=re.sub(r'月','-',bday)
+  bday=re.sub(r'日','',bday)
+  menkyo= menkyo.encode("utf-8").replace("年","")
+  menkyo=re.sub(r'（.*$',"",menkyo)
   code=param.split("/")[3]
   f=open("data/jockey.txt","a")
-  f.write(code+"\t"+name.encode('utf-8')+"\t"+bday.encode('utf-8')+"\t"+"\t"+syozoku.encode('utf-8')+"\n")
+  f.write(code+"\t"+yomi.encode('utf-8')+"\t"+name.encode('utf-8')+"\t"+bday.encode('utf-8')+"\t"+menkyo+"\t"+syozoku.encode('utf-8')+"\n")
   f.close()
 
 def get_jockeyall():
@@ -54,6 +65,7 @@ def get_jockeyall():
   for i in range(0,size):
     #print hira[i:i+1]
     get_jockey(hira[i:i+1])
+    exit 
 
 if __name__ == '__main__':
   get_jockeyall()

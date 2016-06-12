@@ -5,6 +5,7 @@ import urllib
 import urllib2
 from lxml import etree
 import time
+import re
 
 
 def get_trainer(hira):
@@ -45,9 +46,18 @@ def get_trainer_detail(param):
   bday=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[0]
   syozoku=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[1]
   menkyo=root.xpath('//div[@id="dirTitName"]/ul/li/text()')[2]
+
+  bday=bday.encode('utf-8')
+  bday=re.sub(r'年','-',bday)
+  bday=re.sub(r'月','-',bday)
+  bday=re.sub(r'日','',bday)
+
+  menkyo= menkyo.encode("utf-8").replace("年","")
+  menkyo=re.sub(r'（.*$',"",menkyo)
+
   code=param.split("/")[3]
   f=open("data/trainer.txt","a")
-  f.write(code+"\t"+kname.encode('utf-8')+"\t"+name.encode('utf-8')+"\t"+bday.encode('utf-8')+"\t"+"\t"+syozoku.encode('utf-8')+"\t"+menkyo.encode('utf-8')+"\n")
+  f.write(code+"\t"+kname.encode('utf-8')+"\t"+name.encode('utf-8')+"\t"+bday.encode('utf-8')+"\t"+menkyo.encode('utf-8')+"\t"+syozoku.encode('utf-8')+"\n")
   f.close()
 
 def get_trainerall():
