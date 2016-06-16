@@ -14,7 +14,7 @@ def to_s(s):
   return s.encode('utf-8').strip()
 
 def get_result(code):
-  #try:
+  try:
     url="http://keiba.yahoo.co.jp/race/result/"+code+"/"
     res=urllib.urlopen(url)
     page=res.read()
@@ -23,8 +23,8 @@ def get_result(code):
     get_odds(code,root)
     get_resultlist(code,root)
     time.sleep(1)
-  #except :
-  #  print "error:"+code
+  except :
+    print "error:"+code
 
 def to_date(s):
   s=re.sub('（.*$','',s)
@@ -49,10 +49,12 @@ def get_course(code,root):
   elem=root.xpath('//div[@id="raceTitName"]/h1/text()')
   racename=to_s(elem[0]) # race name
 
-  grade=re.sub(r'^.*（G','',racename)
-  grade=re.sub(r'）.*$','',grade)
-  grade=str(len(grade))
-
+  grade=""
+  if racename.find(')')>=0 and racename.find('(')>=0:
+    grade=re.sub(r'^.*（G','',racename)
+    grade=re.sub(r'）.*$','',grade)
+    grade=str(len(grade))
+  
   raceno=str(root.xpath('//td[@id="raceNo"]/text()')[0].replace("R",""))
 
   elem=root.xpath('//p[@id="raceTitMeta"]/text()')
@@ -144,7 +146,7 @@ def get_resultlist(code,root):
     if cnt > 1:
       td=ele.xpath('./td')
       if len(td) > 0 :
-        #try:
+        try:
           chakujun=to_s(td[0].text)
           wakuban=to_s(td[1].xpath('./span/text()')[0])
           umaban=to_s(td[2].text)
@@ -203,8 +205,8 @@ def get_resultlist(code,root):
           f=open("data/seiseki_data.txt","a")
           f.write(s+"\n")
           f.close()
-        #except:
-        #  print td
+        except:
+          print td
 
 
 #http://keiba.yahoo.co.jp/race/result/1403010101/
@@ -228,8 +230,8 @@ def get_resultlist(code,root):
 
 
 def get_resultall():
-  #nen=["00","01","02","03","04","05","06","07","08","09","10","11","12","13"]
-  nen=["13"]
+  nen=["00","01","02","03","04","05","06","07","08","09","10","11","12","13"]
+  #nen=["13"]
   jou=["01","02","03","04","05","06","07","08","09","10"]
   kai=["01","02","03","04","05","06","07","08","09","10"]
   nichi=["01","02","03","04","05","06","07","08","09","10"]
@@ -242,7 +244,7 @@ def get_resultall():
             get_result( n+j+k+ni+r )
 
 if __name__ == '__main__':
-  #get_resultall()
+  get_resultall()
   #get_result("1406010111")
   #get_result("0001010101")
-  get_result("1605010711")
+  #get_result("1605010711")
