@@ -35,9 +35,9 @@ def get_pedigree_list(hira,p):
   time.sleep(1)
   return ret
 
-def get_pedigree_detail(param):
-  print param
-  url="http://keiba.yahoo.co.jp/directory/horse/"+param
+def get_pedigree_detail(code):
+  print code
+  url="http://keiba.yahoo.co.jp/directory/horse/"+code
   res=urllib.urlopen(url)
   page=res.read().replace('\n','').replace('\r','')
   root=etree.fromstring(page,etree.HTMLParser())
@@ -70,10 +70,29 @@ def get_pedigree_detail(param):
   print "母母:"+mm
   print "母母父:"+mmf
   print "母母母:"+mmm
+  name=root.xpath('//div[@id="dirTitName"]//h1/text()')[0]
+  print "bamei:"+name
+  ele=root.xpath('//div[@id="dirTitName"]//ul/li/text()')
+  bday=ele[0].encode('utf-8')
+  bday=re.sub(r'年','-',bday)
+  bday=re.sub(r'月','-',bday)
+  bday=re.sub(r'日','',bday)
+  print "bday:"+bday
+  keiro=ele[1].encode('utf-8')
+  print "keiro:"+keiro
+  banusi=ele[3].encode('utf-8')
+  print "banusi:"+banusi
+  seisan=ele[4].encode('utf-8')
+  print "seisan:"+seisan
+  sanchi=ele[5].encode('utf-8')
+  print "sanchi:"+sanchi
   return
-  f=open("data/pedigree.txt","a")
-  f.write(code+"\t"+yomi.encode('utf-8')+"\t"+name.encode('utf-8')+"\t"+bday.encode('utf-8')+"\t"+menkyo+"\t"+syozoku.encode('utf-8')+"\n")
-  f.close()
+  fi=open("data/pedigree.txt","a")
+  fi.write(code+"\t"+f+"\t"+ff+"\t"+fff+"\t"+ffm+"\t"+fm+"\t"+fmf+"\t"+fmm+"\t"+m+"\t"+mf+"\t"+mff+"\t"+mfm+"\t"+mm+"\t"+mmf+"\t"+mmm
+  fi.close()
+  fi.open("data/uma.txt","a")
+  fi.write(code+"\t"+name+"\t"+bday+"\t"+keiro+"\t"+banusi+"\t"+seisan+"\t"+sanchi
+  fi.close()
 
 def get_pedigreeall():
   hira=u"あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよわ"
