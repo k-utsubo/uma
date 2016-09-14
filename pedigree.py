@@ -86,12 +86,12 @@ def get_pedigree_detail(code):
   print "seisan:"+seisan
   sanchi=ele[5].encode('utf-8')
   print "sanchi:"+sanchi
-  return
+  #return
   fi=open("data/pedigree.txt","a")
-  fi.write(code+"\t"+f+"\t"+ff+"\t"+fff+"\t"+ffm+"\t"+fm+"\t"+fmf+"\t"+fmm+"\t"+m+"\t"+mf+"\t"+mff+"\t"+mfm+"\t"+mm+"\t"+mmf+"\t"+mmm
+  fi.write(code+"\t"+f+"\t"+ff+"\t"+fff+"\t"+ffm+"\t"+fm+"\t"+fmf+"\t"+fmm+"\t"+m+"\t"+mf+"\t"+mff+"\t"+mfm+"\t"+mm+"\t"+mmf+"\t"+mmm)
   fi.close()
   fi.open("data/uma.txt","a")
-  fi.write(code+"\t"+name+"\t"+bday+"\t"+keiro+"\t"+banusi+"\t"+seisan+"\t"+sanchi
+  fi.write(code+"\t"+name+"\t"+bday+"\t"+keiro+"\t"+banusi+"\t"+seisan+"\t"+sanchi)
   fi.close()
 
 def get_pedigreeall():
@@ -103,5 +103,5 @@ def get_pedigreeall():
     exit 
 
 if __name__ == '__main__':
-  #get_pedigreeall()
-  get_pedigree_detail(u"2010104902")
+  get_pedigreeall()
+  #get_pedigree_detail(u"2010104902")
